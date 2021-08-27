@@ -18,4 +18,10 @@ public class HelloWorldController {
         return "index";
     }
 
+    @GetMapping("/posts/save")
+    public String postSave(){
+        return "posts-save";
+    }
+
+
 }
