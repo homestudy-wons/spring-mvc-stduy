@@ -23,5 +23,9 @@ public class HelloWorldController {
         return "posts-save";
     }
 
+    @GetMapping("/posts/update/")
+    public String postUpate(){
+        return "posts-update";
+    }
 
 }
