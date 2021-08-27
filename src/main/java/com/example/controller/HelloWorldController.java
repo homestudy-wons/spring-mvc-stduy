@@ -23,7 +23,7 @@ public class HelloWorldController {
         return "posts-save";
     }
 
-    @GetMapping("/posts/update/")
+    @GetMapping("/posts/update")
     public String postUpate(){
         return "posts-update";
     }
