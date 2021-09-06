@@ -1,9 +1,11 @@
 package com.example.controller;
 
 
+import com.example.dto.PostsResponseDto;
 import com.example.service.PostService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.ui.Model;
 
@@ -32,9 +34,12 @@ public class HelloWorldController {
         return "posts-save";
     }
 
-    @GetMapping("/posts/update")
-    public String postUpate(){
+    @GetMapping("/posts/update/{id}")
+    public String postsUpdate(@PathVariable Long id, Model model){
+
+        PostsResponseDto dto = postService.findById(id);
+        model.addAttribute("post", dto);
+
         return "posts-update";
     }
-
 }
