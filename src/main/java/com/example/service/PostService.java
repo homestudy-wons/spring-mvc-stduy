@@ -1,5 +1,6 @@
 package com.example.service;
 
+import com.example.dto.PostsListResponseDto;
 import com.example.dto.PostsResponseDto;
 import com.example.dto.PostsSaveRequestDto;
 import com.example.dto.PostsUpdateRequestDto;
@@ -42,6 +43,13 @@ public class PostService {
         return postsRepository.findAll()
                 .stream()
                 .map(posts -> new PostsResponseDto(posts))
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public List<PostsListResponseDto> findAllDesc() {
+        return postsRepository.findAllDesc().stream()
+                .map(PostsListResponseDto::new)
                 .collect(Collectors.toList());
     }
 }
