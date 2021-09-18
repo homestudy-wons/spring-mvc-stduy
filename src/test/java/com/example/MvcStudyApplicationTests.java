@@ -75,17 +75,19 @@ class MvcStudyApplicationTests {
 		assertThat(responseEntity.getBody()).isGreaterThan(0L);
 
 
-		List<Posts> all = postsRepository.findAll();
-		assertThat(all.get(0).getTitle()).isEqualTo(title);
-		assertThat(all.get(0).getContent()).isEqualTo(content);
-	}
+		postsRepository.findById(responseEntity.getBody().longValue()).map(post -> {
+			assertThat(post.getTitle()).isEqualTo(title);
+			assertThat(post.getContent()).isEqualTo(content);
+			return null;
+		});
 
+	}
 
 	@Test
 	public void PostsUpdate_ok() throws Exception {
 		//given
 		Posts savePosts = postsRepository.save(Posts.builder()
-				.title("title")
+				.title("title update")
 				.content("content")
 				.author("author")
 				.build());
