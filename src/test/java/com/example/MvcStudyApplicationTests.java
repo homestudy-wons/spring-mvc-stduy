@@ -5,6 +5,7 @@ import com.example.dto.PostsSaveRequestDto;
 import com.example.dto.PostsUpdateRequestDto;
 import com.example.model.Posts;
 import com.example.model.PostsRepository;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -80,6 +81,29 @@ class MvcStudyApplicationTests {
 			assertThat(post.getContent()).isEqualTo(content);
 			return null;
 		});
+
+	}
+
+	@Test
+	@DisplayName("타이틀을 title 로 해서 에러 추력 확인")
+	public void testPostSave_title_null_fail(){
+		//given
+		String title = null;
+		String content = "content";
+		PostsSaveRequestDto requestDto = PostsSaveRequestDto.builder()
+				.title(title)
+				.content(content)
+				.author("jwon")
+				.build();
+
+		String url = "http://localhost:" + port + "/api/v1/posts";
+
+		//when
+		restTemplate.postForEntity(url, requestDto, Object.class);
+
+		//then
+//		assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+
 
 	}
 

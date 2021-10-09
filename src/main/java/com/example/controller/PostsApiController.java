@@ -7,6 +7,7 @@ import com.example.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -16,7 +17,7 @@ public class PostsApiController {
     private final PostService postService;
 
     @PostMapping("/api/v1/posts")
-    public Long save(@RequestBody PostsSaveRequestDto requestDto) {
+    public Long save(final @Valid @RequestBody PostsSaveRequestDto requestDto) {
 
         return postService.save(requestDto);
     }
