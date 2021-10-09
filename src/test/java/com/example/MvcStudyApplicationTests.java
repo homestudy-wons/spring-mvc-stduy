@@ -99,10 +99,10 @@ class MvcStudyApplicationTests {
 		String url = "http://localhost:" + port + "/api/v1/posts";
 
 		//when
-		restTemplate.postForEntity(url, requestDto, Object.class);
+		ResponseEntity<Object> responseEntity = restTemplate.postForEntity(url, requestDto, Object.class);
 
 		//then
-//		assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+		assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
 
 
 	}

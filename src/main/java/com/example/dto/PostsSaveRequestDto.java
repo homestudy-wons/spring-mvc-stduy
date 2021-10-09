@@ -1,26 +1,19 @@
 package com.example.dto;
 
 import com.example.model.Posts;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
-@Builder
+@Getter
 @NoArgsConstructor
-@ToString
 public class PostsSaveRequestDto {
 
-    @NotNull(message = "this title is net empty")
-    private String title;
-
     @NotNull
-    @Size(min=3, max=100, message = "content is greater than 3 characters and less than 100 characters")
-
+    private String title;
     private String content;
-    @NotNull(message = "author is not null")
-
     private String author;
 
     @Builder
@@ -39,4 +32,5 @@ public class PostsSaveRequestDto {
                 .build();
     }
 }
+
 

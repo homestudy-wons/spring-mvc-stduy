@@ -5,6 +5,7 @@ import com.example.dto.PostsSaveRequestDto;
 import com.example.dto.PostsUpdateRequestDto;
 import com.example.service.PostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -17,7 +18,7 @@ public class PostsApiController {
     private final PostService postService;
 
     @PostMapping("/api/v1/posts")
-    public Long save(final @Valid @RequestBody PostsSaveRequestDto requestDto) {
+    public Long save(@Validated @RequestBody PostsSaveRequestDto requestDto) {
 
         return postService.save(requestDto);
     }
