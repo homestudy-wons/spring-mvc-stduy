@@ -167,7 +167,5 @@ class MvcStudyApplicationTests {
 		list.forEach(postsResponseDto -> {
 			System.out.println(postsResponseDto.toString());
 		});
-
 	}
-
 }
