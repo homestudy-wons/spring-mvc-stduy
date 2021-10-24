@@ -20,4 +20,8 @@ public class Member {
     @Column(length = 10, nullable = false)
     private String status;
 
+    public void unregister(String status) {
+        this.status = status;
+    }
+
 }

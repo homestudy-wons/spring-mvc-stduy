@@ -64,6 +64,7 @@ class MvcStudyApplicationTests {
 				.title(title)
 				.content(content)
 				.author("jwon")
+				.status("1")
 				.build();
 
 		String url = "http://localhost:" + port + "/api/v1/posts";
@@ -114,6 +115,7 @@ class MvcStudyApplicationTests {
 				.title("title update")
 				.content("content")
 				.author("author")
+				.status("1")
 				.build());
 
 		Long updateId = savePosts.getId();
@@ -151,6 +153,7 @@ class MvcStudyApplicationTests {
 				.title("title")
 				.content("content")
 				.author("author")
+				.status("1")
 				.build());
 
 		String url = "http://localhost:" + port + "/api/v1/posts";

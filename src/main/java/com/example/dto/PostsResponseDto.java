@@ -13,14 +13,14 @@ public class PostsResponseDto {
     private String title;
     private String content;
     private String author;
-
-
+    private String status;
 
     public PostsResponseDto(Posts entity) {
         this.id = entity.getId();
         this.title = entity.getTitle();
         this.content = entity.getContent();
         this.author = entity.getAuthor();
+        this.status = entity.getStatus();
     }
 
 
@@ -29,6 +29,7 @@ public class PostsResponseDto {
                 .title(this.title)
                 .content(this.content)
                 .author(this.author)
+                .status(this.status)
                 .build();
     }
 }
