@@ -60,6 +60,7 @@ class MvcStudyApplicationTests {
 		//given
 		String title = "title";
 		String content = "content";
+		String status = "writed";
 		PostsSaveRequestDto requestDto = PostsSaveRequestDto.builder()
 				.title(title)
 				.content(content)
@@ -79,6 +80,7 @@ class MvcStudyApplicationTests {
 		postsRepository.findById(responseEntity.getBody().longValue()).map(post -> {
 			assertThat(post.getTitle()).isEqualTo(title);
 			assertThat(post.getContent()).isEqualTo(content);
+			assertThat(post.getStatus()).isEqualTo(status);
 			return null;
 		});
 
@@ -141,6 +143,17 @@ class MvcStudyApplicationTests {
 
 		assertThat(posts.getTitle()).isEqualTo(expectedTitle);
 		assertThat(posts.getContent()).isEqualTo(expectedContent);
+	}
+
+
+	@Test
+	public void PostsDelete_ok() throws Exception {
+		//given
+
+		//when
+
+		//then
+
 	}
 
 	@Test
