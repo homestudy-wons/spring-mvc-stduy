@@ -166,6 +166,31 @@ class MvcStudyApplicationTests {
 				.orElseThrow(()->new IllegalArgumentException("Post does not exist"));
 
 		assertThat(getPosts.getStatus()).isEqualTo("delete");
+		assertThat(getPosts.getStatus()).isEqualTo(savePosts.getStatus());
+
+	}
+
+
+	@Test
+	@DisplayName("API 로 게시글 삭제 처리")
+	public void testPostDelete(){
+		//given
+		Posts savePosts = postsRepository.save(Posts.builder()
+				.title("title delete")
+				.content("content")
+				.author("author")
+				.build());
+
+		String url = "http://localhost:" + port + "/api/v1/posts/" + savePosts.getId();
+
+		//when
+		restTemplate.delete(url, String.class);
+
+		//then
+		Posts getPosts = postsRepository.findById(savePosts.getId())
+				.orElseThrow(()->new IllegalArgumentException("Post does not exist"));
+
+		assertThat(getPosts.getStatus()).isEqualTo("delete");
 
 	}
 

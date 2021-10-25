@@ -23,12 +23,17 @@ public class PostsApiController {
         return postService.save(requestDto);
     }
 
-
     @PutMapping("/api/v1/posts/{id}")
     public Long update(@PathVariable Long id, @RequestBody
             PostsUpdateRequestDto requestDto) {
 
         return postService.update(id, requestDto);
+    }
+
+    @DeleteMapping("/api/v1/posts/{id}")
+    public String delete(@PathVariable Long id) {
+
+        return postService.delete(id);
     }
 
     @GetMapping("/api/v1/posts/{id}")
