@@ -15,10 +15,12 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.annotation.Rollback;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import javax.sql.DataSource;
+import javax.transaction.Transactional;
 import java.sql.Connection;
 import java.util.Arrays;
 import java.util.List;
@@ -26,6 +28,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Rollback(false)
 class MvcStudyApplicationTests {
 
 	@LocalServerPort
@@ -147,12 +150,22 @@ class MvcStudyApplicationTests {
 
 
 	@Test
+	@Transactional
 	public void PostsDelete_ok() throws Exception {
 		//given
-
+		Posts savePosts = postsRepository.save(Posts.builder()
+				.title("title delete")
+				.content("content")
+				.author("author")
+				.build());
 		//when
+		savePosts.deletePosts();
 
 		//then
+		Posts getPosts = postsRepository.findById(savePosts.getId())
+				.orElseThrow(()->new IllegalArgumentException("Post does not exist"));
+
+		assertThat(getPosts.getStatus()).isEqualTo("delete");
 
 	}
 
