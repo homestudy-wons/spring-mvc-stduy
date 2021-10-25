@@ -27,11 +27,11 @@ public class Posts extends  BaseTimeEntity{
     private String status;
 
     @Builder
-    public Posts(String title, String content, String author, String status) {
+    public Posts(String title, String content, String author) {
         this.title = title;
         this.content = content;
         this.author = author;
-        this.status = status;
+        this.status = "writed";
     }
 
     public void update(String title, String content) {
@@ -39,4 +39,7 @@ public class Posts extends  BaseTimeEntity{
         this.content = content;
     }
 
+    public void deletePosts(){
+        this.status = "delete";
+    }
 }

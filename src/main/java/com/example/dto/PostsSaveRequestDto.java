@@ -19,11 +19,10 @@ public class PostsSaveRequestDto {
 
     @Builder
     public PostsSaveRequestDto(String title, String content,
-                               String author, String status) {
+                               String author) {
         this.title = title;
         this.content = content;
         this.author = author;
-        this.status = status;
     }
 
     public Posts toEntity() {
@@ -31,7 +30,6 @@ public class PostsSaveRequestDto {
                 .title(title)
                 .content(content)
                 .author(author)
-                .status(status)
                 .build();
     }
 }

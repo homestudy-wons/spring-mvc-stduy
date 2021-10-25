@@ -20,7 +20,6 @@ public class PostsResponseDto {
         this.title = entity.getTitle();
         this.content = entity.getContent();
         this.author = entity.getAuthor();
-        this.status = entity.getStatus();
     }
 
 
@@ -29,7 +28,6 @@ public class PostsResponseDto {
                 .title(this.title)
                 .content(this.content)
                 .author(this.author)
-                .status(this.status)
                 .build();
     }
 }

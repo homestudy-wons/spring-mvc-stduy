@@ -60,11 +60,11 @@ class MvcStudyApplicationTests {
 		//given
 		String title = "title";
 		String content = "content";
+		String status = "writed";
 		PostsSaveRequestDto requestDto = PostsSaveRequestDto.builder()
 				.title(title)
 				.content(content)
 				.author("jwon")
-				.status("1")
 				.build();
 
 		String url = "http://localhost:" + port + "/api/v1/posts";
@@ -80,6 +80,7 @@ class MvcStudyApplicationTests {
 		postsRepository.findById(responseEntity.getBody().longValue()).map(post -> {
 			assertThat(post.getTitle()).isEqualTo(title);
 			assertThat(post.getContent()).isEqualTo(content);
+			assertThat(post.getStatus()).isEqualTo(status);
 			return null;
 		});
 
@@ -115,7 +116,6 @@ class MvcStudyApplicationTests {
 				.title("title update")
 				.content("content")
 				.author("author")
-				.status("1")
 				.build());
 
 		Long updateId = savePosts.getId();
@@ -146,6 +146,16 @@ class MvcStudyApplicationTests {
 	}
 
 	@Test
+	public void PostsDelete_ok() throws Exception {
+		//given
+
+		//when
+
+		//then
+
+	}
+
+	@Test
 	public void PostsList_ok() throws Exception {
 
 		//given
@@ -153,7 +163,6 @@ class MvcStudyApplicationTests {
 				.title("title")
 				.content("content")
 				.author("author")
-				.status("1")
 				.build());
 
 		String url = "http://localhost:" + port + "/api/v1/posts";
