@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import com.example.dto.PostsDeleteRequestDto;
 import com.example.dto.PostsResponseDto;
 import com.example.dto.PostsSaveRequestDto;
 import com.example.dto.PostsUpdateRequestDto;
@@ -29,6 +30,13 @@ public class PostsApiController {
             PostsUpdateRequestDto requestDto) {
 
         return postService.update(id, requestDto);
+    }
+
+    @PutMapping("/api/v1/posts/{id}")
+    public Long delete(@PathVariable Long id, @RequestBody
+            PostsDeleteRequestDto requestDto) {
+
+        return postService.delete(id, requestDto);
     }
 
     @GetMapping("/api/v1/posts/{id}")

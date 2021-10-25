@@ -1,5 +1,6 @@
 package com.example;
 
+import com.example.dto.PostsDeleteRequestDto;
 import com.example.dto.PostsResponseDto;
 import com.example.dto.PostsSaveRequestDto;
 import com.example.dto.PostsUpdateRequestDto;
@@ -116,6 +117,7 @@ class MvcStudyApplicationTests {
 				.title("title update")
 				.content("content")
 				.author("author")
+
 				.build());
 
 		Long updateId = savePosts.getId();
@@ -148,10 +150,34 @@ class MvcStudyApplicationTests {
 	@Test
 	public void PostsDelete_ok() throws Exception {
 		//given
+		Posts deletePosts = postsRepository.save(Posts.builder()
+				.title("title update")
+				.content("content")
+				.author("author")
+				.build());
+
+		Long deleteId = deletePosts.getId();
+		String expectedStatus = "delete";
+		PostsDeleteRequestDto requestDto = PostsDeleteRequestDto.builder()
+				.status(expectedStatus)
+				.build();
+
+		String url = "http://localhost:" + port + "/api/v1/posts/" + deleteId;
+
+		HttpEntity<PostsDeleteRequestDto> requestEntity = new HttpEntity<>(requestDto);
 
 		//when
+		ResponseEntity<Long> responseEntity = restTemplate.exchange(url, HttpMethod.PUT, requestEntity, Long.class);
 
 		//then
+		assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+		assertThat(responseEntity.getBody()).isGreaterThan(0L);
+
+		Posts posts = postsRepository
+				.findById(deleteId)
+				.orElseThrow(()-> new IllegalArgumentException());
+
+		assertThat(posts.getStatus()).isEqualTo(expectedStatus);
 
 	}
 

@@ -13,7 +13,6 @@ public class PostsResponseDto {
     private String title;
     private String content;
     private String author;
-    private String status;
 
     public PostsResponseDto(Posts entity) {
         this.id = entity.getId();
