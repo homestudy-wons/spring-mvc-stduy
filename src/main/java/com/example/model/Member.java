@@ -6,6 +6,9 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+@Getter
+@NoArgsConstructor
+@Entity
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,8 +23,16 @@ public class Member {
     @Column(length = 10, nullable = false)
     private String status;
 
-    public void unregister(String status) {
-        this.status = status;
+    @Builder
+    public Member(String id, String password, String name) {
+        this.id = id;
+        this.password = password;
+        this.name = name;
+        this.status = "join";
+    }
+
+    public void withdraw() {
+        this.status = "withdraw";
     }
 
 }
