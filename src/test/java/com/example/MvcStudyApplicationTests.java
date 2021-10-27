@@ -1,8 +1,11 @@
 package com.example;
 
+import com.example.dto.MemberSaveRequestDto;
 import com.example.dto.PostsResponseDto;
 import com.example.dto.PostsSaveRequestDto;
 import com.example.dto.PostsUpdateRequestDto;
+import com.example.model.Member;
+import com.example.model.MemberRepository;
 import com.example.model.Posts;
 import com.example.model.PostsRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -44,6 +47,9 @@ class MvcStudyApplicationTests {
 
 	@Autowired
 	private PostsRepository postsRepository;
+
+	@Autowired
+	private MemberRepository memberRepository;
 
 	@Test
 	public void connectionTest() throws Exception{
@@ -219,5 +225,46 @@ class MvcStudyApplicationTests {
 		});
 
 	}
+
+	/*
+	@Test
+	public void testMemberSave_ok(){
+		//given
+		String id = "kw200211";
+		String password = "password";
+		String name = "김지윤";
+		String status = "join";
+		MemberSaveRequestDto requestDto = MemberSaveRequestDto.builder()
+				.id(id)
+				.password(password)
+				.name(name)
+				.build();
+
+		String url = "http://localhost:" + port + "/api/v1/member";
+
+		//when
+		ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, requestDto, String.class);
+
+		//then
+		assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+		assertThat(responseEntity.getBody()).isGreaterThan(0L);
+
+
+		memberRepository.findById(responseEntity.getBody().Value()).map(post -> {
+			assertThat(post.getTitle()).isEqualTo(title);
+			assertThat(post.getContent()).isEqualTo(content);
+			assertThat(post.getStatus()).isEqualTo(status);
+			return null;
+		});
+
+
+
+	}
+	*/
+	/** TODO: 21. 10. 28.
+	 *  post와는 성격이 다름
+	 *  테스트 케이스 다시 생각해 보기
+	 *
+	 */
 
 }
