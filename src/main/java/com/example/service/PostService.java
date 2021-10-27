@@ -30,12 +30,12 @@ public class PostService {
     }
 
     @Transactional
-    public Long delete(Long id, PostsDeleteRequestDto requestDto) {
+    public String delete(Long id){
         Posts posts = postsRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id="+ id));
+        posts.deletePosts();
 
-        posts.deletePosts(requestDto.getStatus());
-        return id;
+        return "deleted";
     }
 
     public PostsResponseDto findById (Long id) {

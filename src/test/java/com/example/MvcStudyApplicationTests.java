@@ -1,6 +1,5 @@
 package com.example;
 
-import com.example.dto.PostsDeleteRequestDto;
 import com.example.dto.PostsResponseDto;
 import com.example.dto.PostsSaveRequestDto;
 import com.example.dto.PostsUpdateRequestDto;
@@ -20,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import javax.sql.DataSource;
+import javax.transaction.Transactional;
 import java.sql.Connection;
 import java.util.Arrays;
 import java.util.List;
@@ -148,38 +148,50 @@ class MvcStudyApplicationTests {
 	}
 
 	@Test
+	@Transactional
 	public void PostsDelete_ok() throws Exception {
 		//given
-		Posts deletePosts = postsRepository.save(Posts.builder()
-				.title("title update")
+		Posts savePosts = postsRepository.save(Posts.builder()
+				.title("title delete")
+				.content("content")
+				.author("author")
+				.build());
+		//when
+		savePosts.deletePosts();
+
+		//then
+		Posts getPosts = postsRepository.findById(savePosts.getId())
+				.orElseThrow(()->new IllegalArgumentException("Post does not exist"));
+
+		assertThat(getPosts.getStatus()).isEqualTo("delete");
+		assertThat(getPosts.getStatus()).isEqualTo(savePosts.getStatus());
+
+	}
+
+
+	@Test
+	@DisplayName("API 로 게시글 삭제 처리")
+	public void testPostDelete(){
+		//given
+		Posts savePosts = postsRepository.save(Posts.builder()
+				.title("title delete")
 				.content("content")
 				.author("author")
 				.build());
 
-		Long deleteId = deletePosts.getId();
-		String expectedStatus = "delete";
-		PostsDeleteRequestDto requestDto = PostsDeleteRequestDto.builder()
-				.status(expectedStatus)
-				.build();
-
-		String url = "http://localhost:" + port + "/api/v1/posts/" + deleteId;
-
-		HttpEntity<PostsDeleteRequestDto> requestEntity = new HttpEntity<>(requestDto);
+		String url = "http://localhost:" + port + "/api/v1/posts/" + savePosts.getId();
 
 		//when
-		ResponseEntity<Long> responseEntity = restTemplate.exchange(url, HttpMethod.PUT, requestEntity, Long.class);
+		restTemplate.delete(url, String.class);
 
 		//then
-		assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-		assertThat(responseEntity.getBody()).isGreaterThan(0L);
+		Posts getPosts = postsRepository.findById(savePosts.getId())
+				.orElseThrow(()->new IllegalArgumentException("Post does not exist"));
 
-		Posts posts = postsRepository
-				.findById(deleteId)
-				.orElseThrow(()-> new IllegalArgumentException());
-
-		assertThat(posts.getStatus()).isEqualTo(expectedStatus);
+		assertThat(getPosts.getStatus()).isEqualTo("delete");
 
 	}
+
 
 	@Test
 	public void PostsList_ok() throws Exception {

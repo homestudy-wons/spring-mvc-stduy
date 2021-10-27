@@ -39,7 +39,7 @@ public class Posts extends  BaseTimeEntity{
         this.content = content;
     }
 
-    public void deletePosts(String status){
+    public void deletePosts(){
         this.status = "delete";
     }
 }

@@ -1,6 +1,5 @@
 package com.example.controller;
 
-import com.example.dto.PostsDeleteRequestDto;
 import com.example.dto.PostsResponseDto;
 import com.example.dto.PostsSaveRequestDto;
 import com.example.dto.PostsUpdateRequestDto;
@@ -9,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -32,11 +30,10 @@ public class PostsApiController {
         return postService.update(id, requestDto);
     }
 
-    @PutMapping("/api/v1/posts/{id}")
-    public Long delete(@PathVariable Long id, @RequestBody
-            PostsDeleteRequestDto requestDto) {
+    @DeleteMapping("/api/v1/posts/{id}")
+    public String delete(@PathVariable Long id) {
 
-        return postService.delete(id, requestDto);
+        return postService.delete(id);
     }
 
     @GetMapping("/api/v1/posts/{id}")
