@@ -63,7 +63,7 @@ class MvcStudyApplicationTests {
 		//given
 		String title = "title";
 		String content = "content";
-		String status = "writed";
+		String status = "wrote";
 		PostsSaveRequestDto requestDto = PostsSaveRequestDto.builder()
 				.title(title)
 				.content(content)
@@ -113,6 +113,7 @@ class MvcStudyApplicationTests {
 	}
 
 	@Test
+	@DisplayName("글을 업데이트 한다.")
 	public void PostsUpdate_ok() throws Exception {
 		//given
 		Posts savePosts = postsRepository.save(Posts.builder()
@@ -151,6 +152,7 @@ class MvcStudyApplicationTests {
 
 	@Test
 	@Transactional
+	@DisplayName("글을 삭제 처리 한다. 실질적으로는 flag 처리만 한다.")
 	public void PostsDelete_ok() throws Exception {
 		//given
 		Posts savePosts = postsRepository.save(Posts.builder()
@@ -195,6 +197,7 @@ class MvcStudyApplicationTests {
 	}
 
 	@Test
+	@DisplayName("글목록을 가지고 온다.")
 	public void PostsList_ok() throws Exception {
 
 		//given
@@ -211,7 +214,6 @@ class MvcStudyApplicationTests {
 				= restTemplate.getForEntity(url, PostsResponseDto[].class);
 
 		List<PostsResponseDto> list = Arrays.asList(responseEntity.getBody());
-
 
 		//when
 		assertThat(list.size()).isGreaterThan(0);
