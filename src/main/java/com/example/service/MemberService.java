@@ -2,7 +2,6 @@ package com.example.service;
 
 import com.example.dto.MemberSaveRequestDto;
 import com.example.dto.MemberResponseDto;
-import com.example.dto.MemberListResponseDto;
 import com.example.model.Member;
 import com.example.model.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -36,10 +35,4 @@ public class MemberService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional
-    public List<MemberListResponseDto> findAllDesc() {
-        return memberRepository.findAllDesc().stream()
-                .map(MemberListResponseDto::new)
-                .collect(Collectors.toList());
-    }
 }

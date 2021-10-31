@@ -226,7 +226,7 @@ class MvcStudyApplicationTests {
 
 	}
 
-	/*
+
 	@Test
 	public void testMemberSave_ok(){
 		//given
@@ -247,24 +247,16 @@ class MvcStudyApplicationTests {
 
 		//then
 		assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-		assertThat(responseEntity.getBody()).isGreaterThan(0L);
 
-
-		memberRepository.findById(responseEntity.getBody().Value()).map(post -> {
-			assertThat(post.getTitle()).isEqualTo(title);
-			assertThat(post.getContent()).isEqualTo(content);
-			assertThat(post.getStatus()).isEqualTo(status);
+		memberRepository.findById(responseEntity.getBody()).map(post -> {
+			assertThat(post.getId()).isEqualTo(id);
+			assertThat(post.getPassword()).isEqualTo(password);
+			assertThat(post.getName()).isEqualTo(name);
 			return null;
 		});
 
 
-
 	}
-	*/
-	/** TODO: 21. 10. 28.
-	 *  post와는 성격이 다름
-	 *  테스트 케이스 다시 생각해 보기
-	 *
-	 */
+
 
 }

@@ -4,6 +4,11 @@ const title = document.getElementById("title");
 const author = document.getElementById("author");
 const content = document.getElementById("content");
 const btn_update = document.getElementById("btn-update");
+const member_btn = document.getElementById("member-btn")
+const member_id = document.getElementById("member-id");
+const password = document.getElementById("password");
+const name = document.getElementById("name")
+
 
 if(btn){
     btn.addEventListener("click", () => {
@@ -58,5 +63,31 @@ if(btn_update) {
             }
         }
     })
+}
+
+if(member_btn){
+    member_btn.addEventListener("click", () => {
+
+        const data = {
+            member_id : member_id.value,
+            password : password.value,
+            name : name.value
+        }
+
+        console.log(data)
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '/api/v1/member', true);
+        xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+        xhr.send(JSON.stringify(data))
+        xhr.onload = ()=>{
+            if(xhr.status == 200){
+                console.log(xhr.response);
+                console.log("success");
+            }else{
+                console.log("fail");
+            }
+        }
+    });
 }
 

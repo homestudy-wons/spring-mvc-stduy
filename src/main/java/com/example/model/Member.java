@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Entity
 public class Member {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(length = 20, nullable = false)
     private String id;
 
     @Column(length = 20, nullable = false)
