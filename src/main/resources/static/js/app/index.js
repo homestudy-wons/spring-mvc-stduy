@@ -5,7 +5,6 @@ const author = document.getElementById("author");
 const content = document.getElementById("content");
 const btn_update = document.getElementById("btn-update");
 const member_btn = document.getElementById("member-btn")
-const member_id = document.getElementById("member-id");
 const password = document.getElementById("password");
 const name = document.getElementById("name")
 
@@ -67,9 +66,9 @@ if(btn_update) {
 
 if(member_btn){
     member_btn.addEventListener("click", () => {
-
+        const id = document.getElementById("id");
         const data = {
-            member_id : member_id.value,
+            id : id.value,
             password : password.value,
             name : name.value
         }

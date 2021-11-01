@@ -248,7 +248,7 @@ class MvcStudyApplicationTests {
 		//then
 		assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
 
-		memberRepository.findById(responseEntity.getBody()).map(post -> {
+		memberRepository.findById(requestDto.getId()).map(post -> {
 			assertThat(post.getId()).isEqualTo(id);
 			assertThat(post.getPassword()).isEqualTo(password);
 			assertThat(post.getName()).isEqualTo(name);
