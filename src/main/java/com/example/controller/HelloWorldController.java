@@ -50,15 +50,4 @@ public class HelloWorldController {
         return "member-save";
     }
 
-    @GetMapping("/message")
-    @ResponseBody
-    public HashMap<String, Object> retrunMessage() {
-        HashMap<String, Object> map = new HashMap<String, Object>();
-        map.put("code", "so1");
-        map.put("message", "member 저장에 성공하였습니다.");
-
-        return map;
-    }
-
-    // TODO: 21. 11. 1. member 가입 성공 시 json 리턴 컨트롤러 호출하기 
 }

@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -16,9 +17,13 @@ public class MemberApiController {
     private final MemberService memberService;
 
     @PostMapping("/api/v1/member")
-    public String save(@Validated @RequestBody MemberSaveRequestDto requestDto) {
-
-        return memberService.save(requestDto);
+    public HashMap<String, Object> save(@Validated @RequestBody MemberSaveRequestDto requestDto) {
+        memberService.save(requestDto);
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put("code", "so1");
+        map.put("message", "member 저장에 성공하였습니다.");
+        map.put("id", requestDto.getId());
+        return map;
     }
 
     @GetMapping("/api/v1/member/{id}")
