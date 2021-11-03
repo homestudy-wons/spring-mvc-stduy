@@ -258,5 +258,49 @@ class MvcStudyApplicationTests {
 
 	}
 
+	@Test
+	@Transactional
+	public void MemberWithdraw_ok() throws Exception {
+		//given
+		Member saveMember = memberRepository.save(Member.builder()
+				.id("jiyun1")
+				.password("password1!")
+				.name("김지윤")
+				.build());
+		//when
+		saveMember.withdraw();
+
+		//then
+		Member getMember = memberRepository.findById(saveMember.getId())
+				.orElseThrow(()->new IllegalArgumentException("Member does not exist"));
+
+		assertThat(getMember.getStatus()).isEqualTo("withdraw");
+		assertThat(getMember.getStatus()).isEqualTo(saveMember.getStatus());
+
+	}
+
+	@Test
+	@DisplayName("API 로 회원탈퇴 처리")
+	public void testMemberDelete(){
+		//given
+		Member saveMember = memberRepository.save(Member.builder()
+				.id("jiyun1")
+				.password("password1!")
+				.name("김지윤")
+				.build());
+
+		String url = "http://localhost:" + port + "/api/v1/member/" + saveMember.getId();
+
+		//when
+		restTemplate.delete(url, String.class);
+
+		//then
+		Member getPosts = memberRepository.findById(saveMember.getId())
+				.orElseThrow(()->new IllegalArgumentException("Member does not exist"));
+
+		assertThat(getPosts.getStatus()).isEqualTo("withdraw");
+
+	}
+
 
 }

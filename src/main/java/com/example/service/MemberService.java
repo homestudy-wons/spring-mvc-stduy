@@ -21,6 +21,15 @@ public class MemberService {
         return memberRepository.save(requestDto.toEntity()).getId();
     }
 
+    @Transactional
+    public String withdraw(String id){
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 회원이 없습니다. id="+id));
+        member.withdraw();
+
+        return "withdraw";
+    }
+
     public MemberResponseDto findById (String id) {
         Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 회원이 없습니다. id="+ id));

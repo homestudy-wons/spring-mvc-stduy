@@ -25,6 +25,11 @@ public class MemberApiController {
         map.put("id", requestDto.getId());
         return map;
     }
+    @DeleteMapping("api/v1/member/{id}")
+    public String withdraw(@PathVariable String id) {
+
+        return memberService.withdraw(id);
+    }
 
     @GetMapping("/api/v1/member/{id}")
     public MemberResponseDto findById(@PathVariable String id) {
