@@ -267,6 +267,12 @@ class MvcStudyApplicationTests {
 				.password("password1!")
 				.name("김지윤")
 				.build());
+
+		Posts savePosts = postsRepository.save(Posts.builder()
+				.title("title delete")
+				.content("content")
+				.author("jiyun1")
+				.build());
 		//when
 		saveMember.withdraw();
 
@@ -274,8 +280,13 @@ class MvcStudyApplicationTests {
 		Member getMember = memberRepository.findById(saveMember.getId())
 				.orElseThrow(()->new IllegalArgumentException("Member does not exist"));
 
+		Posts getPosts = postsRepository.findById(savePosts.getId())
+				.orElseThrow(()->new IllegalArgumentException("Posts does not exist"));
+
 		assertThat(getMember.getStatus()).isEqualTo("withdraw");
 		assertThat(getMember.getStatus()).isEqualTo(saveMember.getStatus());
+		assertThat(getPosts.getStatus()).isEqualTo("deleted");
+		assertThat(getPosts.getStatus()).isEqualTo(savePosts.getStatus());
 
 	}
 

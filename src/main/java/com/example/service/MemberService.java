@@ -2,8 +2,11 @@ package com.example.service;
 
 import com.example.dto.MemberSaveRequestDto;
 import com.example.dto.MemberResponseDto;
+import com.example.dto.PostsResponseDto;
 import com.example.model.Member;
 import com.example.model.MemberRepository;
+import com.example.model.Posts;
+import com.example.model.PostsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +18,7 @@ import java.util.stream.Collectors;
 @Service
 public class MemberService {
     private final MemberRepository memberRepository;
+    private final PostsRepository postsRepository;
 
     @Transactional
     public String save(MemberSaveRequestDto requestDto) {
@@ -24,7 +28,7 @@ public class MemberService {
     @Transactional
     public String withdraw(String id){
         Member member = memberRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당 회원이 없습니다. id="+id));
+                .orElseThrow(() -> new IllegalArgumentException("해당 회원이 없습니다. id=" + id));
         member.withdraw();
 
         return "withdraw";
