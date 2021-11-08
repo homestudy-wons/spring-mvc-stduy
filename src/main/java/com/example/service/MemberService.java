@@ -30,9 +30,17 @@ public class MemberService {
         Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 회원이 없습니다. id=" + id));
         member.withdraw();
+        Posts posts = postsRepository.findByAuthor(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 회원의 게시물이 없습니다. id=" + id));
+        if(posts.equals(memberRepository.findById(id))){
+            posts.deletePosts();
+        }
 
         return "withdraw";
     }
+
+    // TODO: 21. 11. 8.
+    // 회원 탈퇴시 게시글 삭제 로직 MemberService에서 분리하여 작성하기
 
     public MemberResponseDto findById (String id) {
         Member member = memberRepository.findById(id)
