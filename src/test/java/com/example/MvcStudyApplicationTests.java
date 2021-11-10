@@ -8,6 +8,7 @@ import com.example.model.Member;
 import com.example.model.MemberRepository;
 import com.example.model.Posts;
 import com.example.model.PostsRepository;
+import com.example.service.MemberService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,9 @@ class MvcStudyApplicationTests {
 
 	@Autowired
 	private MemberRepository memberRepository;
+
+	@Autowired
+	private MemberService memberService;
 
 	@Test
 	public void connectionTest() throws Exception{
@@ -169,7 +173,7 @@ class MvcStudyApplicationTests {
 		Posts getPosts = postsRepository.findById(savePosts.getId())
 				.orElseThrow(()->new IllegalArgumentException("Post does not exist"));
 
-		assertThat(getPosts.getStatus()).isEqualTo("delete");
+		assertThat(getPosts.getStatus()).isEqualTo("deleted");
 		assertThat(getPosts.getStatus()).isEqualTo(savePosts.getStatus());
 
 	}
@@ -194,7 +198,7 @@ class MvcStudyApplicationTests {
 		Posts getPosts = postsRepository.findById(savePosts.getId())
 				.orElseThrow(()->new IllegalArgumentException("Post does not exist"));
 
-		assertThat(getPosts.getStatus()).isEqualTo("delete");
+		assertThat(getPosts.getStatus()).isEqualTo("deleted");
 
 	}
 
@@ -274,13 +278,13 @@ class MvcStudyApplicationTests {
 				.author("jiyun1")
 				.build());
 		//when
-		saveMember.withdraw();
+		memberService.withdraw(saveMember.getId());
 
 		//then
 		Member getMember = memberRepository.findById(saveMember.getId())
 				.orElseThrow(()->new IllegalArgumentException("Member does not exist"));
 
-		Posts getPosts = postsRepository.findById(savePosts.getId())
+		Posts getPosts = postsRepository.findByAuthor(savePosts.getAuthor())
 				.orElseThrow(()->new IllegalArgumentException("Posts does not exist"));
 
 		assertThat(getMember.getStatus()).isEqualTo("withdraw");
@@ -295,9 +299,15 @@ class MvcStudyApplicationTests {
 	public void testMemberDelete(){
 		//given
 		Member saveMember = memberRepository.save(Member.builder()
-				.id("jiyun1")
+				.id("kw200211")
 				.password("password1!")
 				.name("김지윤")
+				.build());
+
+		Posts savePosts = postsRepository.save(Posts.builder()
+				.title("공지사항 입니다.")
+				.content("내일은 쉬는날 입니다.")
+				.author("kw200211")
 				.build());
 
 		String url = "http://localhost:" + port + "/api/v1/member/" + saveMember.getId();
@@ -306,11 +316,14 @@ class MvcStudyApplicationTests {
 		restTemplate.delete(url, String.class);
 
 		//then
-		Member getPosts = memberRepository.findById(saveMember.getId())
+		Member getMember = memberRepository.findById(saveMember.getId())
 				.orElseThrow(()->new IllegalArgumentException("Member does not exist"));
 
-		assertThat(getPosts.getStatus()).isEqualTo("withdraw");
+		Posts getPosts = postsRepository.findByAuthor(savePosts.getAuthor())
+				.orElseThrow(()->new IllegalArgumentException("Posts does not exist"));
 
+		assertThat(getMember.getStatus()).isEqualTo("withdraw");
+		assertThat(getPosts.getStatus()).isEqualTo("deleted");
 	}
 
 

@@ -29,12 +29,15 @@ public class MemberService {
     public String withdraw(String id){
         Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 회원이 없습니다. id=" + id));
-        member.withdraw();
+
         Posts posts = postsRepository.findByAuthor(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 회원의 게시물이 없습니다. id=" + id));
-        if(posts.equals(memberRepository.findById(id))){
+
+        if(member.getId().equals(posts.getAuthor())){
             posts.deletePosts();
         }
+
+        member.withdraw();
 
         return "withdraw";
     }
