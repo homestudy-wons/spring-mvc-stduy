@@ -59,6 +59,17 @@ class MvcStudyApplicationTests {
 	}
 
 	@Test
+	public void testPostBean(){
+		Posts posts = Posts.builder()
+				.title("title")
+				.content("content")
+				.author("author")
+				.build();
+
+		assertThat(posts.getTitle()).isEqualTo("title");
+	}
+
+	@Test
 	public void testPostSave_ok(){
 		//given
 		String title = "title";
