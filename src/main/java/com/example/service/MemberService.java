@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -22,6 +23,8 @@ public class MemberService {
 
     @Transactional
     public String save(MemberSaveRequestDto requestDto) {
+
+        validateDuplicateMember(requestDto);
         return memberRepository.save(requestDto.toEntity()).getId();
     }
 
@@ -42,8 +45,6 @@ public class MemberService {
         return "withdraw";
     }
 
-    // TODO: 21. 11. 8.
-    // 회원 탈퇴시 게시글 삭제 로직 MemberService에서 분리하여 작성하기
 
     public MemberResponseDto findById (String id) {
         Member member = memberRepository.findById(id)
@@ -59,4 +60,11 @@ public class MemberService {
                 .collect(Collectors.toList());
     }
 
+    private void validateDuplicateMember(MemberSaveRequestDto memberSaveRequestDto){
+        Optional<Member> findMembers = memberRepository.findById(memberSaveRequestDto.getId());
+        if(!findMembers.isEmpty()){
+            throw new IllegalStateException("이미 존재하는 회원입니다.");
+        }
+
+    }
 }

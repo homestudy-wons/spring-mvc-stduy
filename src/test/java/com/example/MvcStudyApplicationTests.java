@@ -29,6 +29,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.fail;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class MvcStudyApplicationTests {
@@ -326,5 +327,29 @@ class MvcStudyApplicationTests {
 		assertThat(getPosts.getStatus()).isEqualTo("deleted");
 	}
 
+	// TODO: 21. 11. 19.
+	//  MemberService에서 회원중복 검증 시 argument를 Member로 받는데
+	//  Member save 할때 받는 argument는  MamberSaveRequestDto다....
+	//  서로 다르다.. 검증 방법을 수정해보자
+	//  주말에 꼭 하기
+	@Test
+	public void 멤버중복테스트() {
+	    //given
+	    Member member1 = memberRepository.save(Member.builder()
+				.id("jiyun")
+	    		.password("123")
+				.name("김지윤")
+				.build());
+
+	    //when
+		Member member2 = memberRepository.save(Member.builder()
+				.id("jiyun")
+				.password("1234")
+				.name("박지윤")
+				.build());
+
+	    //then
+
+	}
 
 }
