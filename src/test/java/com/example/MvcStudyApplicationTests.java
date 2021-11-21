@@ -341,15 +341,18 @@ class MvcStudyApplicationTests {
 				.name("김지윤")
 				.build());
 
-	    //when
 		Member member2 = memberRepository.save(Member.builder()
 				.id("jiyun")
 				.password("1234")
 				.name("박지윤")
 				.build());
 
-	    //then
+	    //when
+		memberService.join(member1);
+		memberService.join(member2);
 
+	    //then
+		fail("예외가 발생해야 한다.");
 	}
 
 }

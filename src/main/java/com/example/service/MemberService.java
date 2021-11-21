@@ -23,9 +23,12 @@ public class MemberService {
 
     @Transactional
     public String save(MemberSaveRequestDto requestDto) {
-
-        validateDuplicateMember(requestDto);
         return memberRepository.save(requestDto.toEntity()).getId();
+    }
+
+    public String join(Member member) {
+        validateDuplicateMember(member);
+        return member.getId();
     }
 
     @Transactional
@@ -60,8 +63,8 @@ public class MemberService {
                 .collect(Collectors.toList());
     }
 
-    private void validateDuplicateMember(MemberSaveRequestDto memberSaveRequestDto){
-        Optional<Member> findMembers = memberRepository.findById(memberSaveRequestDto.getId());
+    private void validateDuplicateMember(Member member){
+        Optional<Member> findMembers = memberRepository.findById(member.getId());
         if(!findMembers.isEmpty()){
             throw new IllegalStateException("이미 존재하는 회원입니다.");
         }
