@@ -327,11 +327,6 @@ class MvcStudyApplicationTests {
 		assertThat(getPosts.getStatus()).isEqualTo("deleted");
 	}
 
-	// TODO: 21. 11. 19.
-	//  MemberService에서 회원중복 검증 시 argument를 Member로 받는데
-	//  Member save 할때 받는 argument는  MamberSaveRequestDto다....
-	//  서로 다르다.. 검증 방법을 수정해보자
-	//  주말에 꼭 하기
 	@Test
 	public void 멤버중복테스트() {
 	    //given
@@ -354,5 +349,7 @@ class MvcStudyApplicationTests {
 	    //then
 		fail("예외가 발생해야 한다.");
 	}
+
+
 
 }
