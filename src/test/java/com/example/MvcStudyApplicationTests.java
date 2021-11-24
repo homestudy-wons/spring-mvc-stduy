@@ -19,6 +19,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.annotation.Rollback;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -32,6 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Rollback(false)
 class MvcStudyApplicationTests {
 
 	@LocalServerPort
@@ -65,6 +67,17 @@ class MvcStudyApplicationTests {
 	public void testMainPageLoading_ok(){
 		String body = restTemplate.getForObject("/", String.class);
 		assertThat(body).contains("스프링 부트로 시작하는 웹 서비스");
+	}
+
+	@Test
+	public void testPostBean(){
+		Posts posts = Posts.builder()
+				.title("title")
+				.content("content")
+				.author("author")
+				.build();
+
+		assertThat(posts.getTitle()).isEqualTo("title");
 	}
 
 	@Test
@@ -122,13 +135,13 @@ class MvcStudyApplicationTests {
 	}
 
 	@Test
+	@DisplayName("글을 업데이트 한다.")
 	public void PostsUpdate_ok() throws Exception {
 		//given
 		Posts savePosts = postsRepository.save(Posts.builder()
 				.title("title update")
 				.content("content")
 				.author("author")
-
 				.build());
 
 		Long updateId = savePosts.getId();
@@ -158,8 +171,10 @@ class MvcStudyApplicationTests {
 		assertThat(posts.getContent()).isEqualTo(expectedContent);
 	}
 
+
 	@Test
 	@Transactional
+	@DisplayName("글을 삭제 처리 한다. 실질적으로는 flag 처리만 한다.")
 	public void PostsDelete_ok() throws Exception {
 		//given
 		Posts savePosts = postsRepository.save(Posts.builder()
@@ -174,37 +189,13 @@ class MvcStudyApplicationTests {
 		Posts getPosts = postsRepository.findById(savePosts.getId())
 				.orElseThrow(()->new IllegalArgumentException("Post does not exist"));
 
-		assertThat(getPosts.getStatus()).isEqualTo("deleted");
+		assertThat(getPosts.getStatus()).isEqualTo("delete");
 		assertThat(getPosts.getStatus()).isEqualTo(savePosts.getStatus());
 
 	}
 
-
 	@Test
-	@DisplayName("API 로 게시글 삭제 처리")
-	public void testPostDelete(){
-		//given
-		Posts savePosts = postsRepository.save(Posts.builder()
-				.title("title delete")
-				.content("content")
-				.author("author")
-				.build());
-
-		String url = "http://localhost:" + port + "/api/v1/posts/" + savePosts.getId();
-
-		//when
-		restTemplate.delete(url, String.class);
-
-		//then
-		Posts getPosts = postsRepository.findById(savePosts.getId())
-				.orElseThrow(()->new IllegalArgumentException("Post does not exist"));
-
-		assertThat(getPosts.getStatus()).isEqualTo("deleted");
-
-	}
-
-
-	@Test
+	@DisplayName("글목록을 가지고 온다.")
 	public void PostsList_ok() throws Exception {
 
 		//given
@@ -230,6 +221,7 @@ class MvcStudyApplicationTests {
 		});
 
 	}
+
 
 
 	@Test
@@ -329,10 +321,10 @@ class MvcStudyApplicationTests {
 
 	@Test
 	public void 멤버중복테스트() {
-	    //given
-	    Member member1 = memberRepository.save(Member.builder()
+		//given
+		Member member1 = memberRepository.save(Member.builder()
 				.id("jiyun")
-	    		.password("123")
+				.password("123")
 				.name("김지윤")
 				.build());
 
@@ -342,14 +334,15 @@ class MvcStudyApplicationTests {
 				.name("박지윤")
 				.build());
 
-	    //when
+		//when
 		memberService.join(member1);
 		memberService.join(member2);
 
-	    //then
+		//then
 		fail("예외가 발생해야 한다.");
 	}
 
 
 
 }
+
