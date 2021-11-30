@@ -1,9 +1,6 @@
 package com.example.service;
 
-import com.example.dto.PostsListResponseDto;
-import com.example.dto.PostsResponseDto;
-import com.example.dto.PostsSaveRequestDto;
-import com.example.dto.PostsUpdateRequestDto;
+import com.example.dto.*;
 import com.example.model.Posts;
 import com.example.model.PostsRepository;
 import lombok.RequiredArgsConstructor;

@@ -1,10 +1,14 @@
 package com.example;
 
+import com.example.dto.MemberSaveRequestDto;
 import com.example.dto.PostsResponseDto;
 import com.example.dto.PostsSaveRequestDto;
 import com.example.dto.PostsUpdateRequestDto;
+import com.example.model.Member;
+import com.example.model.MemberRepository;
 import com.example.model.Posts;
 import com.example.model.PostsRepository;
+import com.example.service.MemberService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +30,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.fail;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Rollback(false)
@@ -46,6 +51,12 @@ class MvcStudyApplicationTests {
 
 	@Autowired
 	private PostsRepository postsRepository;
+
+	@Autowired
+	private MemberRepository memberRepository;
+
+	@Autowired
+	private MemberService memberService;
 
 	@Test
 	public void connectionTest() throws Exception{
@@ -74,7 +85,7 @@ class MvcStudyApplicationTests {
 		//given
 		String title = "title";
 		String content = "content";
-		String status = "wrote";
+		String status = "writed";
 		PostsSaveRequestDto requestDto = PostsSaveRequestDto.builder()
 				.title(title)
 				.content(content)
@@ -183,30 +194,6 @@ class MvcStudyApplicationTests {
 
 	}
 
-
-	@Test
-	@DisplayName("API 로 게시글 삭제 처리")
-	public void testPostDelete(){
-		//given
-		Posts savePosts = postsRepository.save(Posts.builder()
-				.title("title delete")
-				.content("content")
-				.author("author")
-				.build());
-
-		String url = "http://localhost:" + port + "/api/v1/posts/" + savePosts.getId();
-
-		//when
-		restTemplate.delete(url, String.class);
-
-		//then
-		Posts getPosts = postsRepository.findById(savePosts.getId())
-				.orElseThrow(()->new IllegalArgumentException("Post does not exist"));
-
-		assertThat(getPosts.getStatus()).isEqualTo("delete");
-
-	}
-
 	@Test
 	@DisplayName("글목록을 가지고 온다.")
 	public void PostsList_ok() throws Exception {
@@ -226,10 +213,136 @@ class MvcStudyApplicationTests {
 
 		List<PostsResponseDto> list = Arrays.asList(responseEntity.getBody());
 
+
 		//when
 		assertThat(list.size()).isGreaterThan(0);
 		list.forEach(postsResponseDto -> {
 			System.out.println(postsResponseDto.toString());
 		});
+
 	}
+
+
+
+	@Test
+	public void testMemberSave_ok(){
+		//given
+		String id = "kw200211";
+		String password = "password";
+		String name = "김지윤";
+		String status = "join";
+		MemberSaveRequestDto requestDto = MemberSaveRequestDto.builder()
+				.id(id)
+				.password(password)
+				.name(name)
+				.build();
+
+		String url = "http://localhost:" + port + "/api/v1/member";
+
+		//when
+		ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, requestDto, String.class);
+
+		//then
+		assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+		memberRepository.findById(requestDto.getId()).map(post -> {
+			assertThat(post.getId()).isEqualTo(id);
+			assertThat(post.getPassword()).isEqualTo(password);
+			assertThat(post.getName()).isEqualTo(name);
+			return null;
+		});
+
+
+	}
+
+	@Test
+	@Transactional
+	public void MemberWithdraw_ok() throws Exception {
+		//given
+		Member saveMember = memberRepository.save(Member.builder()
+				.id("jiyun1")
+				.password("password1!")
+				.name("김지윤")
+				.build());
+
+		Posts savePosts = postsRepository.save(Posts.builder()
+				.title("title delete")
+				.content("content")
+				.author("jiyun1")
+				.build());
+		//when
+		memberService.withdraw(saveMember.getId());
+
+		//then
+		Member getMember = memberRepository.findById(saveMember.getId())
+				.orElseThrow(()->new IllegalArgumentException("Member does not exist"));
+
+		Posts getPosts = postsRepository.findByAuthor(savePosts.getAuthor())
+				.orElseThrow(()->new IllegalArgumentException("Posts does not exist"));
+
+		assertThat(getMember.getStatus()).isEqualTo("withdraw");
+		assertThat(getMember.getStatus()).isEqualTo(saveMember.getStatus());
+		assertThat(getPosts.getStatus()).isEqualTo("deleted");
+		assertThat(getPosts.getStatus()).isEqualTo(savePosts.getStatus());
+
+	}
+
+	@Test
+	@DisplayName("API 로 회원탈퇴 처리")
+	public void testMemberDelete(){
+		//given
+		Member saveMember = memberRepository.save(Member.builder()
+				.id("kw200211")
+				.password("password1!")
+				.name("김지윤")
+				.build());
+
+		Posts savePosts = postsRepository.save(Posts.builder()
+				.title("공지사항 입니다.")
+				.content("내일은 쉬는날 입니다.")
+				.author("kw200211")
+				.build());
+
+		String url = "http://localhost:" + port + "/api/v1/member/" + saveMember.getId();
+
+		//when
+		restTemplate.delete(url, String.class);
+
+		//then
+		Member getMember = memberRepository.findById(saveMember.getId())
+				.orElseThrow(()->new IllegalArgumentException("Member does not exist"));
+
+		Posts getPosts = postsRepository.findByAuthor(savePosts.getAuthor())
+				.orElseThrow(()->new IllegalArgumentException("Posts does not exist"));
+
+		assertThat(getMember.getStatus()).isEqualTo("withdraw");
+		assertThat(getPosts.getStatus()).isEqualTo("deleted");
+	}
+
+	@Test
+	public void 멤버중복테스트() {
+		//given
+		Member member1 = memberRepository.save(Member.builder()
+				.id("jiyun")
+				.password("123")
+				.name("김지윤")
+				.build());
+
+		Member member2 = memberRepository.save(Member.builder()
+				.id("jiyun")
+				.password("1234")
+				.name("박지윤")
+				.build());
+
+		//when
+		memberService.join(member1);
+		memberService.join(member2);
+
+		//then
+		fail("예외가 발생해야 한다.");
+	}
+
+
+
 }
+

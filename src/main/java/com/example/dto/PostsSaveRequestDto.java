@@ -15,6 +15,7 @@ public class PostsSaveRequestDto {
     private String title;
     private String content;
     private String author;
+    private String status;
 
     @Builder
     public PostsSaveRequestDto(String title, String content,
